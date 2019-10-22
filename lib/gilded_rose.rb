@@ -6,7 +6,7 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
-      if item.name == "Aged Brie" or item.name == "Backstage passes to a TAFKAL80ETC concert" # and item.name != "Sulfuras, Hand of Ragnaros"
+      if item.name == "Aged Brie" or item.name == "Backstage passes to a TAFKAL80ETC concert"
         item.quality += 1
         if item.name == "Backstage passes to a TAFKAL80ETC concert"
           case item.sell_in
