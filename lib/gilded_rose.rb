@@ -20,18 +20,18 @@ class GildedRose
         item.quality = [item.quality-1, 0].max
       end
       item.quality = [item.quality, 50].min
-      if item.name == "Sulfuras, Hand of Ragnaros"
-        item.quality = 80
-      else
-        item.sell_in -= 1
-      end
+      item.sell_in -= 1
       if item.sell_in < 0
         item.quality = 0 if item.name == "Backstage passes to a TAFKAL80ETC concert"
-        if item.name == "Aged Brie" or item.name == "Sulfuras, Hand of Ragnaros"
+        if item.name == "Aged Brie"
           item.quality += 1 if item.quality < 50
         else
           item.quality = [item.quality-1, 0].max
         end
+      end
+      if item.name == "Sulfuras, Hand of Ragnaros"
+        item.quality = 80
+        item.sell_in += 1
       end
     end
   end
