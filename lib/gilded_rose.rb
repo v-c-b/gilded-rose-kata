@@ -11,15 +11,15 @@ class GildedRose
     @items.each do |item|
       case route(item.name)
       when 'staggered'
-        item.quality = update_staggered(item: item)
+        item.quality = update_staggered(item: item, limit: 50)
       when 'always_increase'
-        item.quality = update_general(item: item, change_pos_sell_in: 1, change_neg_sell_in: 2)
+        item.quality = update_general(item: item, change_pos_sell_in: 1, change_neg_sell_in: 2, limit: 50)
       when 'accelerated_decay'
-        item.quality = update_general(item: item, change_pos_sell_in: -2, change_neg_sell_in: -4)
+        item.quality = update_general(item: item, change_pos_sell_in: -2, change_neg_sell_in: -4, limit: 50)
       when 'legendary'
-        item.quality = 80
+        item.quality = update_general(item: item, change_pos_sell_in: 0, change_neg_sell_in: 0, limit: 80)
       else
-        item.quality = update_general(item: item, change_pos_sell_in: -1, change_neg_sell_in: -2)
+        item.quality = update_general(item: item, change_pos_sell_in: -1, change_neg_sell_in: -2, limit: 50)
       end
       item.sell_in -= 1 unless route(item.name) == 'legendary'
     end
@@ -27,25 +27,25 @@ class GildedRose
 
   private
 
-  def update_staggered(item:)
+  def update_staggered(item:, limit:)
     case item.sell_in
     when 6..10
-      item.quality = [[item.quality + 2, 0].max, 50].min
+      item.quality = [[item.quality + 2, 0].max, limit].min
     when 1..5
-      item.quality = [[item.quality + 3, 0].max, 50].min
+      item.quality = [[item.quality + 3, 0].max, limit].min
     when -Float::INFINITY..0
       item.quality = 0
     else
-      item.quality = [[item.quality + 1, 0].max, 50].min
+      item.quality = [[item.quality + 1, 0].max, limit].min
     end
   end
 
-  def update_general(item:, change_pos_sell_in:, change_neg_sell_in:)
+  def update_general(item:, change_pos_sell_in:, change_neg_sell_in:, limit:)
     case item.sell_in
     when 1..Float::INFINITY
-      [[item.quality + change_pos_sell_in, 0].max, 50].min
+      [[item.quality + change_pos_sell_in, 0].max, limit].min
     when -Float::INFINITY..0
-      [[item.quality + change_neg_sell_in, 0].max, 50].min
+      [[item.quality + change_neg_sell_in, 0].max, limit].min
     end
   end
 
