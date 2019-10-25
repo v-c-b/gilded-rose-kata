@@ -32,12 +32,7 @@ class GildedRose
         end
       end
       if item.name == 'Aged Brie'
-        case item.sell_in
-        when 1..Float::INFINITY
-          item.quality = increase_by_but_not_over(item.quality, 1, 50)
-        when -Float::INFINITY..0
-          item.quality = increase_by_but_not_over(item.quality, 2, 50)
-        end
+        item.quality = update_general_type(item: item, change_pos_sell_in: 1, change_neg_sell_in: 2 )
       end
       unless @special_items.include?(item.name) or item.name.include?('Conjured')
         item.quality = update_general_type(item: item, change_pos_sell_in: -1, change_neg_sell_in: -2 )
