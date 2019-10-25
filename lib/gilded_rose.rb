@@ -18,17 +18,23 @@ class GildedRose
           item.quality += 2
         end
       end
-      item.quality += 2 if item.name == 'Aged Brie'
-      item.quality = [[item.quality-1, 0].max,50].min
-      item.sell_in -= 1
-      if item.sell_in < 0
-        item.quality = [item.quality-1, 0].max
-        item.quality = [item.quality+2, 50].min if item.name == "Aged Brie"
+      if item.name == "Aged Brie"
+        case item.sell_in
+        when 1..Float::INFINITY
+          item.quality = [item.quality+1, 50].min
+        when -Float::INFINITY..0
+          item.quality = [item.quality+2, 50].min
+        end
       end
+      if item.sell_in < 1 and item.name != "Aged Brie"
+        item.quality = [item.quality-1, 0].max
+      end
+      item.quality = [[item.quality-1, 0].max,50].min if item.name != "Aged Brie"
       if item.name == "Sulfuras, Hand of Ragnaros"
         item.quality = 80
         item.sell_in += 1
       end
+      item.sell_in -= 1
     end
   end
 end
