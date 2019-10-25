@@ -24,12 +24,7 @@ class GildedRose
         end
       end
       if item.name.include?('Conjured')
-        case item.sell_in
-        when 1..Float::INFINITY
-          item.quality = decrease_by_but_not_below(item.quality, 2, 0)
-        when -Float::INFINITY..0
-          item.quality = decrease_by_but_not_below(item.quality, 4, 0)
-        end
+        item.quality = update_general_type(item: item, change_pos_sell_in: -2, change_neg_sell_in: -4 )
       end
       if item.name == 'Aged Brie'
         item.quality = update_general_type(item: item, change_pos_sell_in: 1, change_neg_sell_in: 2 )
