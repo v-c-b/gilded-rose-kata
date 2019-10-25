@@ -4,7 +4,8 @@ class GildedRose
     @special_items = [
       'Backstage passes to a TAFKAL80ETC concert',
       'Aged Brie',
-      'Sulfuras, Hand of Ragnaros'
+      'Sulfuras, Hand of Ragnaros',
+      'Conjured'
     ]
   end
 
@@ -22,6 +23,14 @@ class GildedRose
           item.quality = increase_by_but_not_over(item.quality, 1, 50)
         end
       end
+      if item.name.include?('Conjured')
+        case item.sell_in
+        when 1..Float::INFINITY
+          item.quality = decrease_by_but_not_below(item.quality, 2, 0)
+        when -Float::INFINITY..0
+          item.quality = decrease_by_but_not_below(item.quality, 4, 0)
+        end
+      end
       if item.name == 'Aged Brie'
         case item.sell_in
         when 1..Float::INFINITY
@@ -30,7 +39,7 @@ class GildedRose
           item.quality = increase_by_but_not_over(item.quality, 2, 50)
         end
       end
-      unless @special_items.include?(item.name)
+      unless @special_items.include?(item.name) or item.name.include?('Conjured')
         case item.sell_in
         when 1..Float::INFINITY
           item.quality = decrease_by_but_not_below(item.quality, 1, 0)
