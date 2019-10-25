@@ -2,41 +2,56 @@ class GildedRose
 
   def initialize(items)
     @items = items
+    @special_items = [
+      'Backstage passes to a TAFKAL80ETC concert',
+      'Aged Brie',
+      'Sulfuras, Hand of Ragnaros'
+    ]
   end
 
   def update_quality()
     @items.each do |item|
-      if item.name == "Backstage passes to a TAFKAL80ETC concert"
+      if item.name == 'Backstage passes to a TAFKAL80ETC concert'
         case item.sell_in
         when 6..10
-          item.quality += 3
+          item.quality = increase_by_but_not_over(item.quality, 2, 50)
         when 1..5
-          item.quality += 4
+          item.quality = increase_by_but_not_over(item.quality, 3, 50)
         when -Float::INFINITY..0
           item.quality = 0
         else
-          item.quality += 2
+          item.quality = increase_by_but_not_over(item.quality, 1, 50)
         end
       end
-      if item.name == "Aged Brie"
+      if item.name == 'Aged Brie'
         case item.sell_in
         when 1..Float::INFINITY
-          item.quality = [item.quality+1, 50].min
+          item.quality = increase_by_but_not_over(item.quality, 1, 50)
         when -Float::INFINITY..0
-          item.quality = [item.quality+2, 50].min
+          item.quality = increase_by_but_not_over(item.quality, 2, 50)
         end
       end
-      if item.sell_in < 1 and item.name != "Aged Brie"
-        item.quality = [item.quality-1, 0].max
+      if ! @special_items.include?(item.name)
+        case item.sell_in
+        when 1..Float::INFINITY
+          item.quality = decrease_by_but_not_below(item.quality, 1, 0)
+        when -Float::INFINITY..0
+          item.quality = decrease_by_but_not_below(item.quality, 2, 0)
+        end
       end
-      item.quality = [[item.quality-1, 0].max,50].min if item.name != "Aged Brie"
-      if item.name == "Sulfuras, Hand of Ragnaros"
-        item.quality = 80
-        item.sell_in += 1
-      end
-      item.sell_in -= 1
+      item.sell_in -= 1 if item.name != 'Sulfuras, Hand of Ragnaros'
     end
   end
+
+private
+  def increase_by_but_not_over(item, increment, limit)
+    [item+increment, limit].min
+  end
+
+  def decrease_by_but_not_below(item, decrement, limit)
+    [item-decrement, limit].max
+  end
+
 end
 
 class Item
