@@ -1,5 +1,4 @@
 class GildedRose
-
   def initialize(items)
     @items = items
     @special_items = [
@@ -9,7 +8,7 @@ class GildedRose
     ]
   end
 
-  def update_quality()
+  def update_quality
     @items.each do |item|
       if item.name == 'Backstage passes to a TAFKAL80ETC concert'
         case item.sell_in
@@ -31,7 +30,7 @@ class GildedRose
           item.quality = increase_by_but_not_over(item.quality, 2, 50)
         end
       end
-      if ! @special_items.include?(item.name)
+      unless @special_items.include?(item.name)
         case item.sell_in
         when 1..Float::INFINITY
           item.quality = decrease_by_but_not_below(item.quality, 1, 0)
@@ -43,15 +42,15 @@ class GildedRose
     end
   end
 
-private
+  private
+
   def increase_by_but_not_over(item, increment, limit)
-    [item+increment, limit].min
+    [item + increment, limit].min
   end
 
   def decrease_by_but_not_below(item, decrement, limit)
-    [item-decrement, limit].max
+    [item - decrement, limit].max
   end
-
 end
 
 class Item
@@ -63,7 +62,7 @@ class Item
     @quality = quality
   end
 
-  def to_s()
+  def to_s
     "#{@name}, #{@sell_in}, #{@quality}"
   end
 end
