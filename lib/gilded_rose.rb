@@ -17,11 +17,11 @@ class GildedRose
       when 'accelerated_decay'
         item.quality = update_general(item: item, change_pos_sell_in: -2, change_neg_sell_in: -4)
       when 'legendary'
-        item.sell_in += 1
+        item.quality = 80
       else
         item.quality = update_general(item: item, change_pos_sell_in: -1, change_neg_sell_in: -2)
       end
-      item.sell_in -= 1
+      item.sell_in -= 1 unless route(item.name) == 'legendary'
     end
   end
 
