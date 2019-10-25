@@ -40,18 +40,22 @@ class GildedRose
         end
       end
       unless @special_items.include?(item.name) or item.name.include?('Conjured')
-        case item.sell_in
-        when 1..Float::INFINITY
-          item.quality = decrease_by_but_not_below(item.quality, 1, 0)
-        when -Float::INFINITY..0
-          item.quality = decrease_by_but_not_below(item.quality, 2, 0)
-        end
+        item.quality = update_general_type(item: item, change_pos_sell_in: -1, change_neg_sell_in: -2 )
       end
       item.sell_in -= 1 if item.name != 'Sulfuras, Hand of Ragnaros'
     end
   end
 
   private
+
+  def update_general_type(item:, change_pos_sell_in:, change_neg_sell_in:)
+    case item.sell_in
+    when 1..Float::INFINITY
+      [[item.quality + change_pos_sell_in, 0].max, 50].min
+    when -Float::INFINITY..0
+      [[item.quality + change_neg_sell_in, 0].max, 50].min
+    end
+  end
 
   def increase_by_but_not_over(item, increment, limit)
     [item + increment, limit].min
