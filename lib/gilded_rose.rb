@@ -10,8 +10,10 @@ class GildedRose
         case item.sell_in
         when 6..10
           item.quality += 3
-        when 0..5
+        when 1..5
           item.quality += 4
+        when -Float::INFINITY..0
+          item.quality = 0
         else
           item.quality += 2
         end
@@ -22,7 +24,6 @@ class GildedRose
       if item.sell_in < 0
         item.quality = [item.quality-1, 0].max
         item.quality = [item.quality+2, 50].min if item.name == "Aged Brie"
-        item.quality = 0 if item.name == "Backstage passes to a TAFKAL80ETC concert"
       end
       if item.name == "Sulfuras, Hand of Ragnaros"
         item.quality = 80
